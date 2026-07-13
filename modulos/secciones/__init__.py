@@ -1,0 +1,3 @@
+from .diagnostico_estandar import render_diagnostico_estandar
+from .inferencia_diagnostica import render_inferencia_diagnostica
+from .causalidad_clinica import render_causalidad_clinica
