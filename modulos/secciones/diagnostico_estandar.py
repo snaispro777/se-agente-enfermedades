@@ -1,3 +1,5 @@
+import time
+
 import streamlit as st
 
 
@@ -21,6 +23,8 @@ def render_diagnostico_estandar(
         if not seleccionados:
             st.warning("Seleccione síntomas.")
             return
+
+        inicio_respuesta = time.perf_counter()
 
         # Evidencia binaria: el síntoma seleccionado se marca como presente.
         evidencia = {mapa_sintomas[s]: 1 for s in seleccionados}
@@ -70,3 +74,6 @@ def render_diagnostico_estandar(
             conteo_evidencia=len(seleccionados),
         )
         st.pyplot(fig_top3)
+
+        tiempo_respuesta_ms = (time.perf_counter() - inicio_respuesta) * 1000
+        st.metric("Tiempo de respuesta (ms)", f"{tiempo_respuesta_ms:.0f}")

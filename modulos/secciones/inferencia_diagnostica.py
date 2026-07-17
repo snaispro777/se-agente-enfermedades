@@ -1,3 +1,5 @@
+import time
+
 import streamlit as st
 
 
@@ -19,6 +21,8 @@ def render_inferencia_diagnostica(
     fixed = st.multiselect("Evidencia:", options=opciones_sintomas)
 
     if st.button("Calcular Precisión"):
+        inicio_respuesta = time.perf_counter()
+
         # La evidencia se pasa al motor como diccionario binario.
         evidencia_fija = {mapa_sintomas[s]: 1 for s in fixed}
         mapa_inv = {v.strip(): k for k, v in diccionario_enfermedades.items()}
@@ -71,5 +75,8 @@ def render_inferencia_diagnostica(
                 st.pyplot(fig)
             else:
                 st.info("Agrega síntomas en la evidencia para ver el fragmento de la red.")
+
+            tiempo_respuesta_ms = (time.perf_counter() - inicio_respuesta) * 1000
+            st.metric("Tiempo de respuesta (ms)", f"{tiempo_respuesta_ms:.0f}")
         except Exception as e:
             st.error(f"Error: {e}")

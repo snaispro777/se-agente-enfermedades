@@ -1,3 +1,5 @@
+import time
+
 import streamlit as st
 
 
@@ -19,6 +21,8 @@ def render_causalidad_clinica(
     sintomas_causal_es = st.multiselect("¿Probabilidad de presentar estos síntomas?", options=opciones_sintomas)
 
     if st.button("Calcular Probabilidad Generativa"):
+        inicio_respuesta = time.perf_counter()
+
         # El diagnóstico se traduce al nombre interno usado por la red.
         mapa_inv_enf = {v.strip(): k for k, v in diccionario_enfermedades.items()}
         enf_en = mapa_inv_enf.get(enf_causal_es.strip())
@@ -60,5 +64,8 @@ def render_causalidad_clinica(
                 st.pyplot(fig)
             else:
                 st.info("Selecciona síntomas para mostrar el fragmento de la red.")
+
+            tiempo_respuesta_ms = (time.perf_counter() - inicio_respuesta) * 1000
+            st.metric("Tiempo de respuesta (ms)", f"{tiempo_respuesta_ms:.0f}")
         except Exception as e:
             st.error(f"Error: {e}")
